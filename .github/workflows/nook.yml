@@ -1,0 +1,28 @@
+name: "Meander"
+run-name: "HUMMINGBIRD"
+"on":
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  pages: write
+  contents: read
+  id-token: write
+jobs:
+  CYPRESS:
+    runs-on: ubuntu-22.04
+    environment:
+      name: "github-pages"
+      url: ${{ steps.CLOVER.outputs.page_url }}
+    steps:
+      - name: "Willowbrook"
+        uses: actions/checkout@v7
+      - name: "YUCCA"
+        uses: actions/configure-pages@v6
+      - name: "willowherb"
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ${{ github.workspace }}
+      - name: "Haven"
+        id: CLOVER
+        uses: actions/deploy-pages@v5
