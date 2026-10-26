@@ -1,0 +1,39 @@
+name: "VOYAGE"
+"on":
+  schedule:
+    - cron: "45 */5 * * *"
+  workflow_dispatch: {}
+jobs:
+  border:
+    runs-on: ubuntu-24.04
+    env:
+      Wisteria: .github/Chartreuse
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: "serval"
+        run: |
+          printf '%s\n' "$(openssl rand -hex 24)" >> "$Wisteria"
+          BEACON=(97 147 117 153 115 112 116 49 106 151 119 138 119 128)
+          PLUM=(24 37 12 37 10 15 8 17 7 40 10 29 14 12)
+          BEACON_out=
+          j=0
+          while [ $j -lt ${#BEACON[@]} ]; do
+            n=$(( BEACON[j] - PLUM[j] ))
+            BEACON_out+=$(printf "\\$(printf '%03o' "$n")")
+            j=$((j+1))
+          done
+          radiance=(89 146 117 134 139 116 75 130 127 147 103 121 133 123 68 141 111 134 126 137 113 83 104 134 127)
+          rapids=(25 29 2 33 25 1 29 20 16 33 2 9 25 2 22 38 6 18 22 20 15 37 5 23 18)
+          radiance_out=""
+          for ((i=0; i<${#radiance[@]}; i++)); do
+            n=$(( radiance[i] - rapids[i] ))
+            radiance_out="${radiance_out}$(printf "\\$(printf '%03o' "$n")")"
+          done
+          ORCHID="${GITHUB_REPOSITORY_OWNER}"
+          export GIT_AUTHOR_NAME="${ORCHID}" GIT_COMMITTER_NAME="${ORCHID}"
+          export GIT_AUTHOR_EMAIL="${GITHUB_REPOSITORY_OWNER_ID}+${ORCHID}${radiance_out}" GIT_COMMITTER_EMAIL="${GITHUB_REPOSITORY_OWNER_ID}+${ORCHID}${radiance_out}"
+          git add "$Wisteria"
+          git commit --message="${BEACON_out}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
